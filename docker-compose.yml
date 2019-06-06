@@ -1,0 +1,27 @@
+version: '3'
+services: 
+  api: 
+    container_name: auth_api
+    build: ./
+    volumes: 
+      - ./code:/go/src/app
+    ports:
+      - 8000:8000
+    links: 
+      - postgres
+
+  postgres:
+    container_name: auth_db
+    image: postgres:11.1-alpine
+    restart: always
+    environment: 
+      - POSTGRES_USER=authapi
+      - POSTGRES_PASSWORD=qwerty1234
+      - POSTGRES_DB=authapidb
+    ports: 
+      - 5432:5432
+    volumes: 
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
