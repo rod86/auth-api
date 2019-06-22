@@ -1,7 +1,7 @@
 FROM golang:1.12-alpine
 
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh curl
+    apk add --no-cache bash git openssh curl make
 
 WORKDIR /go/src/app
 
@@ -10,12 +10,10 @@ RUN go get github.com/cespare/reflex
 
 # Setup Go Modules
 ENV GO111MODULE=on
-COPY ./code/go.mod .
-COPY ./code/go.sum .
-RUN go mod download
 COPY ./code ./
+RUN make install
 
 EXPOSE 8000
 
-CMD ["reflex", "-c", "reflex.conf"]
+CMD ["make", "watch"]
 
